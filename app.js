@@ -11,13 +11,14 @@ var app = express();
 
 var mongoose = require('mongoose');
 
+var bodyParser = require('body-parser');
 
 // 静态文件托管
 app.use('/public', express.static(__dirname + '/public'));
 
 
 app.engine('html', swig.renderFile);
-// 定义末班根目录
+// 定义模板根目录
 app.set('views', './views');
 
 app.set('view engine', 'html');
@@ -36,10 +37,11 @@ swig.setDefaults({cache: false});
 //     res.send('body {background: red;}');
 // });
 
-// 根据不同功能划分模块
+app.use(bodyParser.urlencoded({extended: true}));
 
+// 根据不同功能划分模块
 app.use('/admin', require('./routers/admin'));
-// app.use('/api',require('./routers/api'));
+app.use('/api',require('./routers/api'));
 app.use('/main', require('./routers/main'));
 
 // 监听请求

@@ -1,3 +1,1 @@
-## branch
-
-I am master
+master
