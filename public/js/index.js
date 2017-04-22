@@ -64,6 +64,14 @@ $(function() {
 
                 if (!result.code) {
                     //登录成功
+                    // window.location.reload();
+                    // setTimeout(function () {
+                    //     $loginBox.hide();
+                    //     $userInfo.show();
+                    //
+                    //     $userInfo.find('.username').html( result.userInfo.username);
+                    //     $userInfo.find('.info').html('你好，开心的一天');
+                    // },1000);
                     window.location.reload();
                 }
             }

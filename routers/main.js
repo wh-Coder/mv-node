@@ -6,7 +6,12 @@ var express = require('express');
 var router = express.Router();
 
 router.get('/user', (req, res, next) => {
-    res.render('main');
+
+    console.log(req.userInfo._id);
+
+    res.render('main',{
+        userInfo: req.userInfo
+    });
 });
 
 module.exports = router;

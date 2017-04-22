@@ -9,7 +9,7 @@ var responseData;
 
 router.use( function (req, res, next) {
     responseData = {
-        code: 1,
+        code: 0,
         message: ''
     }
     next();
@@ -85,10 +85,23 @@ router.post('/user/login', function (req,res,next) {
             res.json(responseData);
             return;
         }
+
         responseData.message = '登录成功';
+        responseData.userInfo = {
+          _id: userInfo._id,
+          username: userInfo.username
+        };
+        req.cookies.set('userInfo',JSON.stringify({
+            _id: userInfo._id,
+            username: userInfo.username
+        }));
         res.json(responseData);
         return;
     })
 });
 
+router.get('/user/logout', function (req,res,next) {
+    req.cookies.set('userInfo',null);
+    res.json(responseData);
+});
 module.exports = router;

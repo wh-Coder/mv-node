@@ -13,9 +13,24 @@ var mongoose = require('mongoose');
 
 var bodyParser = require('body-parser');
 
+var Cookies = require('cookies');
+
 // 静态文件托管
 app.use('/public', express.static(__dirname + '/public'));
 
+app.use(function (req,res,next) {
+    req.cookies = new Cookies(req,res);
+
+    req.userInfo = {};
+    if( req.cookies.get('userInfo')){
+        try {
+            req.userInfo = JSON.parse(req.cookies.get('userInfo'));
+        }catch (e){
+            console.log(e);
+        }
+    }
+    next();
+});
 
 app.engine('html', swig.renderFile);
 // 定义模板根目录
@@ -26,17 +41,7 @@ app.set('view engine', 'html');
 // 开发过程中取消模板缓存
 swig.setDefaults({cache: false});
 
-// // 首页
-// app.get('/', (req, res, next) => {
-//     // res.send('欢迎光临我的博客');
-//     res.render('index');
-// });
-
-// app.get('/main.css',(req, res, next)=>{
-//     res.setHeader('content-type','text/css');
-//     res.send('body {background: red;}');
-// });
-
+// 使用body-parser中间键
 app.use(bodyParser.urlencoded({extended: true}));
 
 // 根据不同功能划分模块
