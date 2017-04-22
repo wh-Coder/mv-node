@@ -9,6 +9,8 @@ var swig = require('swig');
 // 创建APP => http.createServer()
 var app = express();
 
+var User = require('./models/user');
+
 var mongoose = require('mongoose');
 
 var bodyParser = require('body-parser');
@@ -19,17 +21,26 @@ var Cookies = require('cookies');
 app.use('/public', express.static(__dirname + '/public'));
 
 app.use(function (req,res,next) {
+
+    // 相当于客户端请求服务器之后，服务器端首先把请求的内容包装了一下
     req.cookies = new Cookies(req,res);
 
     req.userInfo = {};
     if( req.cookies.get('userInfo')){
         try {
             req.userInfo = JSON.parse(req.cookies.get('userInfo'));
+
+            User.findById(req.userInfo._id).then(function (userInfo) {
+                req.userInfo.isAdmin = Boolean(userInfo.isAdmin);
+                next();
+            })
         }catch (e){
             console.log(e);
         }
+    }else{
+        next();
     }
-    next();
+
 });
 
 app.engine('html', swig.renderFile);
