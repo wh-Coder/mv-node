@@ -39,7 +39,7 @@
 
                 {% if userInfo.isAdmin %}
                 <p><span class="cloDark">管理员：{{userInfo.username}}</span></p>
-                <a href="javascript">进入管理模式</a>
+                <a href="/admin">进入管理模式</a>
                 {% else %}
                 <p><span class="cloDark">{{userInfo.username}}</span></p>
                 {% endif %}
