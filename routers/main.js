@@ -5,10 +5,16 @@ var express = require('express');
 
 var router = express.Router();
 
+var Category = require('../models/category');
+
 router.get('/user', (req, res, next) => {
-    res.render('main/index',{
-        userInfo: req.userInfo
-    });
+
+    Category.find().then(function (categories) {
+        res.render('main/index',{
+            userInfo: req.userInfo,
+            categories: categories
+        });
+    })
 });
 
 module.exports = router;

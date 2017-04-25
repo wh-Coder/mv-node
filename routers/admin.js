@@ -6,7 +6,7 @@ var router = express.Router();
 
 var User = require('../models/user');
 var Category = require('../models/category');
-
+var Content = require('../models/content');
 
 router.use(function (req, res, next) {
     if (!req.userInfo.isAdmin) {
@@ -61,7 +61,7 @@ router.get('/category', function (req, res) {
 
         let skip = (page - 1) * limit;
 
-        Category.find().limit(limit).skip(skip).then(function (categories) {
+        Category.find().sort({_id: -1}).limit(limit).skip(skip).then(function (categories) {
             res.render('admin/category_index', {
                 userInfo: req.userInfo,
                 categories: categories,
@@ -198,5 +198,65 @@ router.get('/category/delete', function (req, res) {
         })
     })
 });
+
+router.get('/content', function (req, res) {
+    let page = Number(req.query.page || 1);
+    let limit = 2;
+    let pages = 0;
+
+    Content.count().then(function (count) {
+        pages = Math.ceil(count / limit);
+        page = Math.min(page, pages);
+        page = Math.max(page, 1);
+        let skip = (page - 1) * limit;
+        Content.find().sort({_id: -1}).limit(limit).skip(skip).then(function (contents) {
+            res.render('admin/content_index', {
+                userInfo: req.userInfo,
+                contents: contents,
+
+                count: count,
+                pages: pages,
+                page: page,
+                limit: limit,
+                type: 'content'
+            });
+        });
+    });
+});
+
+router.get('/content/add', function (req, res) {
+
+    Category.find().sort({_id: -1}).then(function (categories) {
+        res.render('admin/content_add', {
+            userInfo: req.userInfo,
+            categories: categories
+        })
+    })
+});
+
+router.post('/content/add', function (req, res) {
+    // console.log(req.body);
+
+    if (req.body.category == '') {
+        res.render('admin/error', {
+            userInfo: req.userInfo,
+            message: '内容标题不能为空'
+        })
+        return;
+    }
+
+    new Content({
+        category: req.body.category,
+        title: req.body.title,
+        description: req.body.description,
+        content: req.body.content
+    }).save().then(function (rs) {
+        res.render('admin/success', {
+            userInfo: req.userInfo,
+            message: '内容保存成功'
+        })
+    });
+});
+
 
 module.exports = router;

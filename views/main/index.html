@@ -9,68 +9,70 @@
     <script src="/public/js/index.js"></script>
 </head>
 <body>
-    <nav>
-        <div class="menu">
-            <a href="javascript:;" class="focus">首页</a>
-            <a href="javascript:;" class="focus">HTML5</a>
-            <a href="javascript:;" class="focus">CSS</a>
-            <a href="javascript:;" class="focus">JS</a>
-            <a href="javascript:;" class="focus">JAVA</a>
+<nav>
+    <div class="menu">
+        {% for category in categories %}
+            <a href="javascript:;">{{category.name}}</a>
+        {% endfor %}
+    </div>
+</nav>
+<main class="clear">
+    <div class="mainLeft">
+        <div class="listBox">
+            <h1>AngularJS</h1>
+            <p class="colDefault">
+                作者: <span class="colInfo">admin</span>
+                时间: <span class="colInfo">2016.7.19</span>
+                阅读: <span class="colInfo">234</span>
+                评论: <span class="colInfo">10</span>
+            </p>
+            <dfn><p>ionic</p></dfn>
+            <div class="function"><a href="/">阅读全文</a></div>
         </div>
-    </nav>
-    <main class="clear">
-        <div class="mainLeft">
-            <!--<div class="listBox">-->
-                <!--<h1>AngularJS</h1>-->
-                <!--<p class="colDefault">-->
-                    <!--作者: <span class="colInfo">admin</span>-->
-                    <!--时间: <span class="colInfo">2016.7.19</span>-->
-                    <!--阅读: <span class="colInfo">234</span>-->
-                    <!--评论: <span class="colInfo">10</span>-->
-                <!--</p>-->
-                <!--<dfn><p>ionic</p></dfn>-->
-                <!--<div class="function"><a href="/">阅读全文</a></div>-->
-            <!--</div>-->
-        </div>
-        <div class="mainRight">
-            {% if userInfo._id %}
-            <div class="rightBox" id="userInfo">
-                <div class="title"><span>用户信息</span></div>
+    </div>
+    <div class="mainRight">
+        {% if userInfo._id %}
+        <div class="rightBox" id="userInfo">
+            <div class="title"><span>用户信息</span></div>
 
-                {% if userInfo.isAdmin %}
-                <p><span class="cloDark">管理员：{{userInfo.username}}</span></p>
-                <a href="/admin">进入管理模式</a>
-                {% else %}
-                <p><span class="cloDark">{{userInfo.username}}</span></p>
-                {% endif %}
-                <p><span class="colDanger">开心每一天</span></p>
-
-                <p><span class="colDark"> <a href="javascript:;" id="logout">退出</a></span></p>
-            </div>
+            {% if userInfo.isAdmin %}
+            <p><span class="cloDark">管理员：{{userInfo.username}}</span></p>
+            <a href="/admin">进入管理模式</a>
             {% else %}
-            <div class="rightBox" id="loginBox">
-                <div class="title"><span>登录</span></div>
-                <div class="line"><span class="colDark">用户名:</span><input type="text" name="username"><em></em></div>
-                <div class="line"><span class="colDark">密  码:</span><input type="password" name="password"><em></em></div>
-                <div class="line"><span class="colDark"></span><button>登录</button></div>
-
-                <p class="textRight">还没注册? <a href="javascript:;" class="colMint">马上注册</a></p>
-                <p class="colWarning textCenter"></p>
-            </div>
-
-            <div class="rightBox" id="registerBox"  style="display: none;">
-                <div class="title"><span>注册</span></div>
-                <div class="line"><span class="colDark">用户名:</span><input type="text" name="username"><em></em></div>
-                <div class="line"><span class="colDark">密码:</span><input type="password" name="password"><em></em></div>
-                <div class="line"><span class="colDark">确认:</span><input type="password" name="repassword"><em></em></div>
-                <div class="line"><span class="colDark"></span><button>注册</button></div>
-
-
-                <p class="textRight">已有账号 <a href="javascript:;" class="colMint">马上登录</a></p>
-                <p class="colWarning textCenter"></p>
-            </div>
+            <p><span class="cloDark">{{userInfo.username}}</span></p>
             {% endif %}
+            <p><span class="colDanger">开心每一天</span></p>
+
+            <p><span class="colDark"> <a href="javascript:;" id="logout">退出</a></span></p>
         </div>
-    </main>
+        {% else %}
+        <div class="rightBox" id="loginBox">
+            <div class="title"><span>登录</span></div>
+            <div class="line"><span class="colDark">用户名:</span><input type="text" name="username"><em></em></div>
+            <div class="line"><span class="colDark">密  码:</span><input type="password" name="password"><em></em></div>
+            <div class="line"><span class="colDark"></span>
+                <button>登录</button>
+            </div>
+
+            <p class="textRight">还没注册? <a href="javascript:;" class="colMint">马上注册</a></p>
+            <p class="colWarning textCenter"></p>
+        </div>
+
+        <div class="rightBox" id="registerBox" style="display: none;">
+            <div class="title"><span>注册</span></div>
+            <div class="line"><span class="colDark">用户名:</span><input type="text" name="username"><em></em></div>
+            <div class="line"><span class="colDark">密码:</span><input type="password" name="password"><em></em></div>
+            <div class="line"><span class="colDark">确认:</span><input type="password" name="repassword"><em></em></div>
+            <div class="line"><span class="colDark"></span>
+                <button>注册</button>
+            </div>
+
+
+            <p class="textRight">已有账号 <a href="javascript:;" class="colMint">马上登录</a></p>
+            <p class="colWarning textCenter"></p>
+        </div>
+        {% endif %}
+    </div>
+</main>
 </body>
 </html>
