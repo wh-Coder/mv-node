@@ -63,36 +63,35 @@ router.get('/category/add', function (req, res) {
 router.post('/category/add', function (req, res) {
     var name = req.body.name || '';
 
-    if (name === '') {
+    if (name == '') {
         res.render('admin/error', {
             userInfo: req.userInfo,
             message: '名字不能为空'
         });
-    }
-
-    Category.findOne({
-        name: name
-    }).then(function (err) {
-        console.log(err);
-        if (err) {
-            res.render('admin/error', {
+    } else {
+        Category.findOne({
+            name: name
+        }).then(function (err) {
+            console.log(err);
+            if (err) {
+                res.render('admin/error', {
+                    userInfo: req.userInfo,
+                    message: '分类已经存在'
+                })
+                return Promise.reject();
+            } else {
+                return new Category({
+                    name: name
+                }).save();
+            }
+        }).then(function () {
+            res.render('admin/success', {
                 userInfo: req.userInfo,
-                message: '分类已经存在'
+                message: '分类保存成功',
+                url: '/admin/category'
             })
-            return Promise.reject();
-        } else {
-            return new Category({
-                name: name
-            }).save();
-        }
-    }).then(function () {
-        res.render('admin/success', {
-            userInfo: req.userInfo,
-            message: '分类保存成功',
-            url: '/admin/category'
         })
-    })
-
+    }
 });
 
 module.exports = router;
