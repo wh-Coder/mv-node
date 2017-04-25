@@ -5,6 +5,9 @@ var express = require('express');
 var router = express.Router();
 
 var User = require('../models/user');
+var Category = require('../models/category');
+
+
 router.use(function (req, res, next) {
     if (!req.userInfo.isAdmin) {
         res.send('对不起，只有管理人员才能进')
@@ -43,6 +46,52 @@ router.get('/user', (req, res) => {
             });
         });
     });
+});
+
+router.get('/category', function (req, res) {
+    res.render('admin/category_index', {
+        userInfo: req.userInfo
+    })
+});
+
+router.get('/category/add', function (req, res) {
+    res.render('admin/category_add', {
+        userInfo: req.userInfo
+    })
+});
+
+router.post('/category/add', function (req, res) {
+    var name = req.body.name || '';
+
+    if (name === '') {
+        res.render('admin/error', {
+            userInfo: req.userInfo,
+            message: '名字不能为空'
+        });
+    }
+
+    Category.findOne({
+        name: name
+    }).then(function (err) {
+        console.log(err);
+        if (err) {
+            res.render('admin/error', {
+                userInfo: req.userInfo,
+                message: '分类已经存在'
+            })
+            return Promise.reject();
+        } else {
+            return new Category({
+                name: name
+            }).save();
+        }
+    }).then(function () {
+        res.render('admin/success', {
+            userInfo: req.userInfo,
+            message: '分类保存成功',
+            url: '/admin/category'
+        })
+    })
 
 });
 
