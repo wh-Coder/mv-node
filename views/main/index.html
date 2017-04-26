@@ -12,22 +12,46 @@
 <nav>
     <div class="menu">
         {% for category in categories %}
-            <a href="javascript:;">{{category.name}}</a>
+        <a href="javascript:;">{{category.name}}</a>
         {% endfor %}
     </div>
 </nav>
 <main class="clear">
     <div class="mainLeft">
+        {% for content in contents %}
         <div class="listBox">
-            <h1>AngularJS</h1>
+            <h1>{{content.title}}</h1>
             <p class="colDefault">
-                作者: <span class="colInfo">admin</span>
-                时间: <span class="colInfo">2016.7.19</span>
-                阅读: <span class="colInfo">234</span>
-                评论: <span class="colInfo">10</span>
+                作者: <span class="colInfo">{{content.user.username}}</span>
+                时间: <span class="colInfo">{{content.addTime|date('Y-m-d H:i:s',-8*60)}}</span>
+                阅读: <span class="colInfo">{{content.views}}</span>
+                <!--评论: <span class="colInfo">10</span>-->
             </p>
-            <dfn><p>ionic</p></dfn>
+            <dfn><p>{{content.description}}</p></dfn>
             <div class="function"><a href="/">阅读全文</a></div>
+        </div>
+        {% endfor %}
+
+        <div class="pager">
+            <ul class="clear">
+                <li class="previous">
+                    {% if page <= 1 %}
+                    <a href="javascript:;">没有上一页</a>
+                    {% else %}
+                    <a href="/main/user?page={{page-1}}">上一页</a>
+                    {% endif %}
+                </li>
+                <li>
+                    <strong>{{page}}/{{pages}}</strong>
+                </li>
+                <li class="next">
+                    {% if page >= pages %}
+                    <a href="javascript:;">没有下一页</a>
+                    {% else %}
+                    <a href="/main/user?page={{page+1}}">下一页</a>
+                    {% endif %}
+                </li>
+            </ul>
         </div>
     </div>
     <div class="mainRight">
