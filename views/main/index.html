@@ -11,8 +11,20 @@
 <body>
 <nav>
     <div class="menu">
-        {% for category in categories %}
-        <a href="javascript:;">{{category.name}}</a>
+        {% if category == '' %}
+        <a href="/main/user" class="focus">首页</a>
+        {% else %}
+        <a href="/main/user">首页</a>
+        {% endif %}
+
+        {% for cate in categories %}
+
+        {% if category == cate.id %}
+        <a href="/main/user?category={{cate.id}}" class="focus">{{cate.name}}</a>
+        {% else %}
+        <a href="/main/user?category={{cate.id}}">{{cate.name}}</a>
+        {% endif %}
+
         {% endfor %}
     </div>
 </nav>
@@ -38,17 +50,19 @@
                     {% if page <= 1 %}
                     <a href="javascript:;">没有上一页</a>
                     {% else %}
-                    <a href="/main/user?page={{page-1}}">上一页</a>
+                    <a href="/main/user?category={{category}}&page={{page-1}}">上一页</a>
                     {% endif %}
                 </li>
+                {% if pages > 0 %}
                 <li>
                     <strong>{{page}}/{{pages}}</strong>
                 </li>
+                {% endif %}
                 <li class="next">
                     {% if page >= pages %}
                     <a href="javascript:;">没有下一页</a>
                     {% else %}
-                    <a href="/main/user?page={{page+1}}">下一页</a>
+                    <a href="/main/user?category={{category}}&page={{page+1}}">下一页</a>
                     {% endif %}
                 </li>
             </ul>
