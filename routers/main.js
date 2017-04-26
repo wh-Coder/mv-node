@@ -52,13 +52,14 @@ router.get('/user', (req, res, next) => {
 
 router.get('/view', function (req, res) {
     var contentId = req.query.contentid || '';
-
     Content.findOne({
         _id: contentId
     }).then(function (content) {
-        console.log(content);
-        // data.content = content;
-        // res.render('main/view',data);
+        data.content = content;
+
+        content.views++;
+        content.save();
+        res.render('main/view', data);
     })
 });
 
