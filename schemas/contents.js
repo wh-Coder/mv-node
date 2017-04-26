@@ -8,7 +8,7 @@ module.exports = new mongoose.Schema({
     // 关联字段
     category: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Content'
+        ref: 'Category'
     },
     title: String,
     description: {
