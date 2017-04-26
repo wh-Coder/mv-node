@@ -8,39 +8,57 @@ var router = express.Router();
 var Category = require('../models/category');
 var Content = require('../models/content');
 
+var data;
+router.use(function (req, res, next) {
+    data = {
+        userInfo: req.userInfo,
+        categories: []
+    }
+    Category.find().then(function (categories) {
+        data.categories = categories;
+        next();
+    })
+
+});
+
 router.get('/user', (req, res, next) => {
 
-    let data = {
-        userInfo: req.userInfo,
-        categories: [],
-        category: req.query.category || '',
-        page: Number(req.query.page || 1),
-        limit: 2,
-        pages: 0,
-        count: 0,
-        contents: []
-    };
+    data.category = req.query.category || '';
+    data.page = Number(req.query.page || 1);
+    data.limit = 2;
+    data.pages = 0;
+    data.count = 0;
+    data.contents = [];
 
     var where = {};
-    if(data.category){
+    if (data.category) {
         where.category = data.category
     }
 
-    Category.find().then(function (categories) {
-        data.categories = categories;
-        return Content.where(where).count();
-    }).then(function (count) {
+    Content.where(where).count().then(function (count) {
         data.count = count;
         data.pages = Math.ceil(data.count / data.limit);
         data.page = Math.min(data.page, data.pages);
         data.page = Math.max(data.page, 1);
         let skip = (data.page - 1) * data.limit;
 
-        return Content.where(where).find().sort({addTime: -1}).limit(data.limit).skip(skip).populate(['category','user']);
+        return Content.where(where).find().sort({addTime: -1}).limit(data.limit).skip(skip).populate(['category', 'user']);
     }).then(function (contents) {
         data.contents = contents;
         res.render('main/index', data);
         console.log(data);
+    })
+});
+
+router.get('/view', function (req, res) {
+    var contentId = req.query.contentid || '';
+
+    Content.findOne({
+        _id: contentId
+    }).then(function (content) {
+        console.log(content);
+        // data.content = content;
+        // res.render('main/view',data);
     })
 });
 
