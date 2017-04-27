@@ -139,9 +139,7 @@ router.get('/category/edit', function (req, res) {
 router.post('/category/edit', function (req, res) {
     var id = req.query.id || '';
     var name = req.body.name || '';
-    Category.findOne({
-        _id: id
-    }).then(function (category) {
+    Category.findById(id).then(function (category) {
         if (!category) {
             res.render('admin/error', {
                 userInfo: req.userInfo,
